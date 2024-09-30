@@ -33,7 +33,7 @@ app.route("/api/users/:_id/exercises")
   .post((req, res) => {
     const user_id = req.params._id;
     const { description, duration: duration_string, date: date_string } = req.body;
-    const date_obj = date_string == "" ? new Date() : new Date(date_string);
+    const date_obj = (date_string == "" || date_string === undefined) ? new Date() : new Date(date_string);
     const date = date_obj.toDateString();
     const duration = Number(duration_string);
 
@@ -65,7 +65,8 @@ app.route("/api/users/:_id/logs")
     if (limit !== undefined)
       log = log.slice(0, limit);
 
-    res.json({ ...userSelect(user), log, count: log.length });
+    const result = { ...userSelect(user), log, count: log.length };
+    res.json(result);
   })
 
 
